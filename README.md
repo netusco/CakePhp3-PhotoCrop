@@ -61,56 +61,56 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
 If no configuration is given or for each missing configuration element the one used is the default.
 
 ```php
-    public function initialize()
-    {
-        parent::initialize();
-        $this->loadComponent('PhotoCrop.Photocrop', [
-            'profile' => [
-                'maxNumImagesAllowed' => 3,
-                'maxWidthPreview' => 500, //pxs
-            ],
-            'cover' => [
-                'maxNumImagesAllowed' => 1, 
-                'aspectRatio' => 4/3,
-                'maxWidthPreview' => 750, //pxs
-            ]
-        ]);
-    }
+public function initialize()
+{
+    parent::initialize();
+    $this->loadComponent('PhotoCrop.Photocrop', [
+        'profile' => [
+            'maxNumImagesAllowed' => 3,
+            'maxWidthPreview' => 500, //pxs
+        ],
+        'cover' => [
+            'maxNumImagesAllowed' => 1, 
+            'aspectRatio' => 4/3,
+            'maxWidthPreview' => 750, //pxs
+        ]
+    ]);
+}
 ```
 
 default config:
 
 ```php
-    protected $_photocropDefaults = [
-        'default' => [
-            'type' => 'default',
-            'maxNumImagesAllowed' => 5,
-            'maxFileSizeAllowed' => 10, //MBs
-            'qualityJpeg' => 0.85, //from 0.0 to 1 (normal default is 0.92)
-            'allowResize' => true,
-            'selMinSize' => [ 50, 50 ], //pxs
-            'maxWidthPreview' => 500, //pxs
-            'maxHeightPreview' => false,
-            'aspectRatio' => 1, //1 square (16/9, 4/3, etc)
-            'bgOpacity' => 0.5,
-            'bgColor' => 'black',
-            'cropImageWidth' => 600, //if ommited and added cropImageHeight width is calculated according to aspectRatio
-        ]
-    ];
+protected $_photocropDefaults = [
+    'default' => [
+        'type' => 'default',
+        'maxNumImagesAllowed' => 5,
+        'maxFileSizeAllowed' => 10, //MBs
+        'qualityJpeg' => 0.85, //from 0.0 to 1 (normal default is 0.92)
+        'allowResize' => true,
+        'selMinSize' => [ 50, 50 ], //pxs
+        'maxWidthPreview' => 500, //pxs
+        'maxHeightPreview' => false,
+        'aspectRatio' => 1, //1 square (16/9, 4/3, etc)
+        'bgOpacity' => 0.5,
+        'bgColor' => 'black',
+        'cropImageWidth' => 600, //if ommited and added cropImageHeight width is calculated according to aspectRatio
+    ]
+];
 ```
 
 * Then within the action method add the contain when you get the entity. 
 (Only if you would like to display the saved photocrops).
 
 ```php
-    $entity = $this->Users->get($this->request->session()->read('Auth.User.id'), ['contain' => ['Photocrops']]);    
+$entity = $this->Users->get($this->request->session()->read('Auth.User.id'), ['contain' => ['Photocrops']]);    
 ```
 
 * To add the photocrop info and patch the resulting entity add this line right before the `save()` call.
 
 ```php
-    // $entity is patched within the Component Photocrop
-    $entity = $this->Photocrop->preparePhotocropsAndPatchEntity($entity);
+// $entity is patched within the Component Photocrop
+$entity = $this->Photocrop->preparePhotocropsAndPatchEntity($entity);
 ```
 
 * Now you are ready to save this entity (no need to Patch it as it's already done).
@@ -128,15 +128,15 @@ After adding the database you need to set up the relations with those models tha
 It loads font-awesome v4.3, Jquery v1.11.2, JCrop v0.9.12 if not loaded already
 
 ```php
-        echo $this->element('PhotoCrop.photocrop_input', [
-            'data' => [
-                'photocrop-type' => 'profile', //if there is only one type defined this can be ommited
-                'entity' => $entity, //to be added only if there is the need to display stored photocrops of this entity 
-                'inputPhotocropLabel' => 'Ajouter une photo', //if ommited there will be no label
-                'inputPhotocropLabelClass' => 'photocrop_label', //only needed if there is label
-                'inputPhotocropClass' => 'form__input--photocrop', //this is the class by default
-            ]
-        ]);
+echo $this->element('PhotoCrop.photocrop_input', [
+    'data' => [
+        'photocrop-type' => 'profile', //if there is only one type defined this can be ommited
+        'entity' => $entity, //to be added only if there is the need to display stored photocrops of this entity 
+        'inputPhotocropLabel' => 'Ajouter une photo', //if ommited there will be no label
+        'inputPhotocropLabelClass' => 'photocrop_label', //only needed if there is label
+        'inputPhotocropClass' => 'form__input--photocrop', //this is the class by default
+    ]
+]);
 ```
 
 To display the images look for them within `webroot/photocrops/{$entity->type}/{$entity->name}` (remove 'webroot' using `$this->Html->image`).
