@@ -1,0 +1,23 @@
+{
+    "name": "cake-jcrop/PhotoCrop",
+    "description": "PhotoCrop plugin for CakePHP 3.0",
+    "type": "cakephp-plugin",
+    "require": {
+        "php": ">=5.4",
+        "cakephp/cakephp": "~3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhotoCrop\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhotoCrop\\Test\\": "tests",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+        }
+    }
+}
